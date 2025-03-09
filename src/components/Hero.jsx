@@ -14,9 +14,8 @@ const Hero = () => {
         location: locationRef.current.value
       })
       setIsSearched(true);
-
-      console.log({title: titleRef.current.value, location: locationRef.current.value})
     }
+    
     return (
         <>
             <div className="relative container 2xl:px-20 mx-auto my-7">
