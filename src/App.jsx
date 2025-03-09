@@ -7,7 +7,7 @@ import ApplyJob from './pages/ApplyJob';
 
 const App = () => {
   return (
-    <div className='underline'>
+    <div>
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/applications' element={<Applications/>} />
