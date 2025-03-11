@@ -4,3 +4,41 @@
 *{
     font-family: 'Outfit', sans-serif;
 }
+
+@layer base{
+    html{
+        scroll-behavior: smooth ;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.rich-text {
+    color: #4b5563; /* Tailwind gray-600 */
+    font-size: 0.875rem; /* text-sm */
+    line-height: 1.5;
+  }
+  
+  .rich-text h2 {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .rich-text ol {
+    padding-left: 1.5rem;
+    list-style-type: decimal;
+    margin-bottom: 1rem;
+  }
+  
+  .rich-text li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .rich-text p {
+    margin-bottom: 1rem;
+  }
+  

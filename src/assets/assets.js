@@ -76,9 +76,7 @@ export const JobCategories = [
     "Locum",
     "Surgical assistant",
     "Medical Officer",
-    "Partner",
-    "Registra",
-    "Clinical Research"
+    "Registra"
 ]
 
 export const JobLocations = [
@@ -179,7 +177,7 @@ export const jobsData = [
         </ol>`,
         salary: 120000,
         date: 1729681667114,
-        category: "Healthcare",
+        category: "Medical Officer",
     },
     {
         _id: '2',
@@ -214,7 +212,7 @@ export const jobsData = [
             </ol>`,
         salary: 120000,
         date: 1729681667114,
-        category: "Healthcare",
+        category: "Locum",
     },
     {
         _id: '3',
@@ -249,7 +247,7 @@ export const jobsData = [
             </ol>`,
         salary: 180000,
         date: 1729682667114,
-        category: "Healthcare",
+        category: "Surgical Assistant",
     },
     {
         _id: '4',
@@ -284,11 +282,11 @@ export const jobsData = [
             </ol>`,
         salary: 135000,
         date: 1729683667114,
-        category: "Healthcare",
+        category: "Registra",
     },
     {
         _id: '5',
-        title: "Anesthesiologist",
+        title: "Locum",
         location: "Houston",
         level: "Senior Level",
         companyId: {
@@ -319,9 +317,113 @@ export const jobsData = [
             </ol>`,
         salary: 250000,
         date: 1729684667114,
-        category: "Healthcare",
+        category: "Medical Officer",
     },
-
+    {
+        _id: '6',
+        title: "Registra",
+        location: "Centurion",
+        level: "Mid-Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359b9",
+            "name": "CityCare Medical Group",
+            "email": "recruitment@citycare.com",
+            "image": company_icon,
+        },
+        description: `
+            <p>We are seeking a dedicated Locum General Practitioner (GP) to provide high-quality medical care in a fast-paced clinical environment. The ideal candidate will have strong diagnostic skills and a patient-centered approach. This is a flexible, short-term role ideal for experienced physicians looking for temporary or contract-based opportunities.</p>
+            
+            <h2><strong>Key Responsibilities</strong></h2>
+            <ol>
+                <li>Conduct patient consultations, diagnose illnesses, and prescribe treatments.</li>
+                <li>Provide urgent care and routine check-ups in a clinical setting.</li>
+                <li>Collaborate with nurses, specialists, and other healthcare professionals.</li>
+                <li>Maintain accurate patient records and ensure compliance with medical regulations.</li>
+                <li>Stay updated with advancements in general medicine and primary care.</li>
+            </ol>
+            
+            <h2><strong>Skills Required</strong></h2>
+            <ol>
+                <li>Medical degree (MBBS, MD, or equivalent) with a valid practicing license.</li>
+                <li>Experience in general practice, urgent care, or family medicine.</li>
+                <li>Strong diagnostic and clinical decision-making skills.</li>
+                <li>Excellent communication and interpersonal abilities.</li>
+                <li>Ability to work in a fast-paced environment with minimal supervision.</li>
+            </ol>`,
+        salary: 120000,
+        date: 1729681667114,
+        category: "Registra",
+    },
+    {
+        _id: '7',
+        title: "Locum General Practitioner",
+        location: "Pretoria",
+        level: "Mid-Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359b9",
+            "name": "CityCare Medical Group",
+            "email": "recruitment@citycare.com",
+            "image": "https://media.wired.com/photos/5a99ba72927dc94e67685b9b/master/w_1600,c_limit/amazon-a-logo.jpg",
+        },
+        description: `
+            <p>We are seeking a dedicated Locum General Practitioner (GP) to provide high-quality medical care in a fast-paced clinical environment. The ideal candidate will have strong diagnostic skills and a patient-centered approach. This is a flexible, short-term role ideal for experienced physicians looking for temporary or contract-based opportunities.</p>
+            
+            <h2><strong>Key Responsibilities</strong></h2>
+            <ol>
+                <li>Conduct patient consultations, diagnose illnesses, and prescribe treatments.</li>
+                <li>Provide urgent care and routine check-ups in a clinical setting.</li>
+                <li>Collaborate with nurses, specialists, and other healthcare professionals.</li>
+                <li>Maintain accurate patient records and ensure compliance with medical regulations.</li>
+                <li>Stay updated with advancements in general medicine and primary care.</li>
+            </ol>
+            
+            <h2><strong>Skills Required</strong></h2>
+            <ol>
+                <li>Medical degree (MBBS, MD, or equivalent) with a valid practicing license.</li>
+                <li>Experience in general practice, urgent care, or family medicine.</li>
+                <li>Strong diagnostic and clinical decision-making skills.</li>
+                <li>Excellent communication and interpersonal abilities.</li>
+                <li>Ability to work in a fast-paced environment with minimal supervision.</li>
+            </ol>`,
+        salary: 120000,
+        date: 1729681667114,
+        category: "Surgical assistant",
+    },
+    {
+        _id: '8',
+        title: "Locum General Practitioner",
+        location: "Pretoria",
+        level: "Mid-Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359b9",
+            "name": "CityCare Medical Group",
+            "email": "recruitment@citycare.com",
+            "image": company_icon,
+        },
+        description: `
+            <p>We are seeking a dedicated Locum General Practitioner (GP) to provide high-quality medical care in a fast-paced clinical environment. The ideal candidate will have strong diagnostic skills and a patient-centered approach. This is a flexible, short-term role ideal for experienced physicians looking for temporary or contract-based opportunities.</p>
+            
+            <h2><strong>Key Responsibilities</strong></h2>
+            <ol>
+                <li>Conduct patient consultations, diagnose illnesses, and prescribe treatments.</li>
+                <li>Provide urgent care and routine check-ups in a clinical setting.</li>
+                <li>Collaborate with nurses, specialists, and other healthcare professionals.</li>
+                <li>Maintain accurate patient records and ensure compliance with medical regulations.</li>
+                <li>Stay updated with advancements in general medicine and primary care.</li>
+            </ol>
+            
+            <h2><strong>Skills Required</strong></h2>
+            <ol>
+                <li>Medical degree (MBBS, MD, or equivalent) with a valid practicing license.</li>
+                <li>Experience in general practice, urgent care, or family medicine.</li>
+                <li>Strong diagnostic and clinical decision-making skills.</li>
+                <li>Excellent communication and interpersonal abilities.</li>
+                <li>Ability to work in a fast-paced environment with minimal supervision.</li>
+            </ol>`,
+        salary: 120000,
+        date: 1729681667114,
+        category: "Locum",
+    }
 
 ];
 

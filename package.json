@@ -12,9 +12,12 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.24.1",
     "@tailwindcss/vite": "^4.0.11",
+    "k-convert": "^1.0.6",
+    "moment": "^2.30.1",
     "quil": "^1.1.30",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.0.11"
   },
