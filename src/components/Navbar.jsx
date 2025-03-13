@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { UserButton, useClerk, useUser } from '@clerk/clerk-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
+import { AppContext } from '../context/AppContext';
 
 const Navbar = () => {
   const { openSignIn, signOut } = useClerk(); // Import signOut function
   const { user, isSignedIn } = useUser();
   const navigate = useNavigate();
 
+  const {open,setOpen} = useContext(AppContext);
+  console.log(open)
   return (
     <div className='shadow-lg py-4 flex justify-between items-center'>
       <div className='container px-4 2xl:px-20 mx-auto flex justify-between items-center'>

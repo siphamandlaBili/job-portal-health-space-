@@ -16,7 +16,7 @@ export const AppProvider = (props) => {
   const [isSearched, setIsSearched] = useState(false);
 
   const [jobs, setJobs] = useState([]);
-
+  const [open,setOpen] = useState(false);
   //function to fetch jobs
   const fetchJobs = async () => {
     setJobs(jobsData)
