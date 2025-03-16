@@ -1,9 +1,22 @@
-import React from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { assets } from '../assets/assets'
+import React, { useState, useEffect } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { assets } from '../assets/assets';
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const [tooltip, setTooltip] = useState(null);
+    const [showTooltip, setShowTooltip] = useState(false);
+
+    const handleTooltip = (name) => {
+        if (window.innerWidth <= 640) { // Apply only on small screens
+            setTooltip(name);
+            setShowTooltip(true);
+            setTimeout(() => {
+                setShowTooltip(false);
+            }, 1000);
+        }
+    };
+
     return (
         <div className='min-h-screen'>
             {/* navbar for recruiter panel */}
@@ -24,35 +37,48 @@ const Dashboard = () => {
                 </div>
             </div>
 
-
-            {/*side bar with add job,manage job,view jobs buttons andd render on right from outlet */}
+            {/* sidebar with add job, manage job, view jobs buttons and render on right from outlet */}
             <div className='flex items-start'>
-                {/* left side  */}
+                {/* left side */}
                 <div className='inline-block min-h-screen border-3 border-[#eeeeee]'>
                     <ul className='flex flex-col items-start pt-5 text-gray-800'>
-                        <NavLink className={({isActive})=> `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} to='/dashboard/add-job'>
-                        <img src={assets.add_icon} alt="" />
-                        <p>Add Job</p>
-                        </NavLink>
-
-                        <NavLink className={({isActive})=> `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} to='/dashboard/manage-jobs'>
-                        <img src={assets.home_icon} alt="" />
-                        <p>Manage Jobs</p>
-                        </NavLink>
-
-                        <NavLink className={({isActive})=> `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} to='/dashboard/view-applications'>
-                        <img src={assets.person_tick_icon} alt="" />
-                        <p>View Applications</p>
-                        </NavLink>
+                        {['add-job', 'manage-jobs', 'view-applications'].map((item, index) => (
+                            <NavLink 
+                                key={item}
+                                className={({ isActive }) => `relative flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} 
+                                to={`/dashboard/${item}`}
+                                onClick={() => handleTooltip(item)}
+                            >
+                                <img className='min-w-4' src={
+                                    item === 'add-job' ? assets.add_icon :
+                                    item === 'manage-jobs' ? assets.home_icon :
+                                    assets.person_tick_icon
+                                } alt="" />
+                                <p className='max-sm:hidden'>{
+                                    item === 'add-job' ? 'Add Job' :
+                                    item === 'manage-jobs' ? 'Manage Jobs' :
+                                    'View Applications'
+                                }</p>
+                                {tooltip === item && showTooltip && (
+                                    <span className='absolute left-full ml-2 bg-gray-800 text-white text-xs rounded px-2 py-1 fade-out'>
+                                        {
+                                            item === 'add-job' ? 'Add Job' :
+                                            item === 'manage-jobs' ? 'Manage Jobs' :
+                                            'View Applications'
+                                        }
+                                    </span>
+                                )}
+                            </NavLink>
+                        ))}
                     </ul>
                 </div>
                 {/* right side */}
                 <div>
-                    <Outlet/>
+                    <Outlet />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Dashboard
+export default Dashboard;
