@@ -12,11 +12,13 @@ import AddJob from './pages/AddJob';
 import ManageJobs from './pages/ManageJobs';
 import ViewApplications from './pages/ViewApplications';
 import 'quill/dist/quill.snow.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
 
   const {showRecruiterLogin} = useContext(AppContext);
-
+  <ToastContainer />
   return (
     <div>
      {showRecruiterLogin && <RecruiterLogin/>}
