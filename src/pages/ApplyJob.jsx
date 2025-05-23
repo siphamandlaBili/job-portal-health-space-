@@ -14,13 +14,31 @@ import Footer from '../components/Footer';
 const ApplyJob = () => {
   const { id } = useParams();
   const [jobData, setJobData] = useState(null);
-  const { jobs } = useContext(AppContext);
+  const { jobs, backendUrl } = useContext(AppContext);
 
+  const fetchJob = async () => {
 
+    try {
+
+     const {data} = await axios.get(backendUrl + `/api/jobs/${id}`);
+
+      if (data.success) {
+      setJobData(data.job);
+    }else{
+      toast.error(data.message);
+    }
+
+  } catch (error) {
+    toast.error(error.message); 
+  }
+
+  }
 
   useEffect(() => {
     if (jobs.length > 0) {
       findJob();
+    } else {
+      fetchJob();
     }
   }, [id, jobs]);
 

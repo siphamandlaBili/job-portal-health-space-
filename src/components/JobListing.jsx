@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
-import { JobCategories, JobLocations, jobsData } from '../assets/assets'
+import { JobCategories, JobLocations } from '../assets/assets'
 import JobCard from './JobCard'
 import { assets } from '../assets/assets'
 
@@ -31,7 +31,8 @@ const JobListing = () => {
     const matchesTitle = (job) => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
     const matchesLocationSearch = (job) => searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
 
-    const newFilteredJobs = jobsData.slice().reverse().filter(job => 
+    // Use jobs from context, not jobsData from assets
+    const newFilteredJobs = jobs.slice().reverse().filter(job => 
       matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesLocationSearch(job)
     );
 

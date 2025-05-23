@@ -5,7 +5,8 @@ import { AppContext } from '../context/AppContext'
 import { useContext } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import {toast} from "react-toastify"
+import { ToastContainer } from 'react-toastify'
 const RecruiterLogin = () => {
 
     const navigate = useNavigate()
@@ -22,36 +23,64 @@ const RecruiterLogin = () => {
     const{setShowRecruiterLogin, backendUrl, setCompanyToken, setCompanyData } = useContext(AppContext)
 
     const onSubmitHandler = async (e) => {
-      e.preventDefault()
+      e.preventDefault();
 
-      if(state =="Sign Up" && !isTextDataSubmitted){
-        setIsTextDataSubmitted(true)
+      if(state == "Sign Up" && !isTextDataSubmitted){
+         return setIsTextDataSubmitted(true);
+         
       }
 
       try {
+          if (state === "Login") {
+              const { data } = await axios.post(`${backendUrl}/api/company/login`,
+                  { email, password },
+                  {
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  }
+              );
 
-        if (state === "Login") {
+              // console.log('Login response:', data);
+              
+              if (data.success) {
+                  setCompanyData(data.company);
+                  setCompanyToken(data.token);
+                  localStorage.setItem('companyToken', data.token);
+                  setShowRecruiterLogin(false);
+                  navigate('/dashboard');
+              } else {
+                  toast.error(data.message || 'Login failed');
+              }
+          }else {
 
-          const {data} = await axios.post(backendUrl + '/api/company/login',{email,password})
-          
-          if (data.success) {
-            console.log(data);
-            setCompanyData(data.company)
-            setCompanyToken(data.token)
-            localStorage.setItem('companyToken',data.token)
-            setShowRecruiterLogin(false)
-            navigate('/dashboard')
-          }else{
-            toast.error(data.message)
+             const formData = new FormData();
+              formData.append('name', name);
+              formData.append('password', password);
+              formData.append('email', email);
+              formData.append('image', image);
+
+              const {data} = await axios.post(backendUrl  + '/api/company/register', formData)
+              
+              if(data.success) {
+                  setCompanyData(data.company);
+                  setCompanyToken(data.token);
+                  localStorage.setItem('companyToken', data.token);
+                  setShowRecruiterLogin(false);
+                  navigate('/dashboard');
+              }else {
+                toast.error(data.message);
+              }
+            
           }
 
-        }
-        
       } catch (error) {
-        
-      }
-
-    }
+        toast.error(error.message)
+          // console.error('Login error:', error);
+          // toast.error(error.response?.data?.message || 
+          //            error.message || 
+          //            'Login failed. Please try again.');
+      }}
 
     useEffect(() => {
       document.body.style.overflow = 'hidden'
@@ -63,6 +92,7 @@ const RecruiterLogin = () => {
 
   return (
     <div className='absolute top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center'>
+      <ToastContainer/>
       <form onSubmit={onSubmitHandler} className='relative bg-white p-10 rounded-xl text-slate-500 ' action="">
         <h1 className='text-center text-2x1 tet-neutral-700 font-medium'>Recruiter {state}</h1>
         <p className='text-sm'>Welcome back! Please sign in to continue</p>
