@@ -33,6 +33,7 @@ export const AppProvider = (props) => {
   const [companyData, setCompanyData] = useState(null);
 
   const [userData, setUserData] = useState(null);
+  
   const [userApplications, setUserApplications] = useState([]);
 
   //function to fetch jobs
@@ -94,6 +95,27 @@ const fetchUserData = async () => {
   }
 }
 
+//function to fetch users applied applications
+const fetchUserApplications = async () => {
+  try {
+
+    const token = await getToken()
+
+    const { data } = await axios.get(`${backendUrl}/api/users/applications`, 
+      {headers: { Authorization: `Bearer ${token}` } }
+    )
+
+    if (data.success) {
+      setUserApplications(data.applications)
+    } else {
+      toast.error(data.message)
+    }
+
+  } catch (error) {
+    toast.error(error.message)
+  }
+}
+
   useEffect(() => {
   fetchJobs(); // Fetch jobs on app load
   const storedCompanyToken = localStorage.getItem('companyToken');
@@ -104,13 +126,14 @@ const fetchUserData = async () => {
 
   useEffect(() => {
   if (companyToken) {
-    fetchCompanyData();
+    fetchCompanyData()
   }
 }, [companyToken]);
 
 useEffect(() => {
   if (user) {
-    fetchUserData();
+    fetchUserData()
+    fetchUserApplications()
   }
 },[user])
 
@@ -121,7 +144,11 @@ useEffect(() => {
     showRecruiterLogin, setShowRecruiterLogin,
     companyToken,setCompanyToken,
     companyData,setCompanyData,
-    backendUrl
+    backendUrl,
+    userData, setUserData,
+    userApplications, setUserApplications,
+    fetchUserData,
+    fetchUserApplications,
   }
 
   return (<AppContext.Provider value={value}>

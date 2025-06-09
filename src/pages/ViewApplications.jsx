@@ -1,9 +1,69 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { viewApplicationsPageData } from "../assets/assets"
 import { assets } from "../assets/assets"
+import { useEffect } from 'react'
+import axios from 'axios'
+import { AppContext } from '../context/AppContext'
+import { toast } from "react-toastify";
+import Loading from "../components/Loading"; // Adjust the path as needed
 
 const ViewApplications = () => {
-  return (
+
+  const {backendUrl, companyToken} = useContext(AppContext)
+
+  const [applicants, setApplicants] = useState(false)
+
+  //Function to fetch company Job Applications Data
+  const fetchCompanyJobApplications = async () => {
+    try {
+
+      const {data} =  await axios.get(`${backendUrl}/api/company/applicants`,
+        {headers:{token : companyToken}}
+      )
+
+      if (data.success && Array.isArray(data.applicants)) {
+        setApplicants(data.applicants.reverse());
+      } else {
+        setApplicants([]);
+        toast.error(data.message || "No applicants found");
+      }
+      
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  //function to update job application status
+  const changeJobApplicationStatus = async (id,status) => {
+    try {
+
+      const {data} = await axios.post(backendUrl + '/api/company/change-status',
+          {id,status},
+          {headers: {token: companyToken}}
+      )
+      
+      if (data.success){
+        fetchCompanyJobApplications()
+      }else{
+        toast.errror(data.message)
+      }
+
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (companyToken) {
+      fetchCompanyJobApplications()
+    }
+  }, [companyToken])
+
+  return applicants ? applicants.length === 0 ? (
+     <div className="flex items-center justify-center h-[70vh]">
+        <p className="text-xl sm:text-2xl">No Applications Available</p>
+      </div>
+   ) : (
     <div className='container mx-auto p-4'>
       <div>
         <table className='w-full max-w-4xl bg-white border border-gray-200 max-sm:text-sm'>
@@ -18,38 +78,42 @@ const ViewApplications = () => {
             </tr>
           </thead>
           <tbody>
-            {viewApplicationsPageData.map((applicant, index) => (
+            {applicants.filter( item => item.jobId && item.userId).map((applicant, index) => (
               <tr key={applicant._id} className='text-gray-700 border-b'>
                 <td className='py-3 px-4 text-center align-middle'>{index + 1}</td>
                 
                 {/* User Name Column */}
-                <td className='py-3 px-4 text-center align-middle'>
+                <td className='py-3 px-4 text-center align-middle flex items-center'>
                   <div className='flex items-center gap-3'>
-                    <img className='w-8 h-8 rounded-full max-sm:hidden' src={applicant.imgSrc} alt="" />
-                    <span>{applicant.name}</span>
+                    <img className='w-8 h-8 rounded-full max-sm:hidden' src={applicant.userId.image} alt="" />
+                    <span>{applicant.userId.name}</span>
                   </div>
                 </td>
 
                 {/* Job Title & Location */}
-                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobTitle}</td>
-                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.location}</td>
+                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobId.title}</td>
+                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobId.location}</td>
 
                 {/* Resume Column */}
                 <td className='py-3 px-4 align-middle'>
-                  <a href="" target='_blank' className='bg-blue-50 text-blue-400 px-3 py-1 rounded inline-flex gap-2 items-center'>
+                  <a href={applicant.userId.resume} target='_blank' className='bg-blue-50 text-blue-400 px-3 py-1 rounded inline-flex gap-2 items-center'>
                     Resume <img src={assets.resume_download_icon} alt="" />
                   </a>
                 </td>
 
                 {/* Action Column */}
                 <td className='py-3 px-4 align-middle relative'>
-                  <div className='relative inline-block text-left group'>
+                  {applicant.status === "Pending"
+                  ?<div className='relative inline-block text-left group'>
                     <button className='text-gray-500 action-button'>...</button>
                     <div className='z-10 hidden absolute right-0 md:left-0 top-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow group-hover:block'>
-                      <button className='block w-full px-4 py-2 text-blue-500 hover:bg-gray-100'>Accept</button>
-                      <button className='block w-full px-4 py-2 text-red-500 hover:bg-gray-100'>Reject</button>
+                      <button onClick={()=> changeJobApplicationStatus(applicant._id,'Accepted')} className='block w-full px-4 py-2 text-blue-500 hover:bg-gray-100'>Accept</button>
+                      <button onClick={()=> changeJobApplicationStatus(applicant._id,'Rejected')} className='block w-full px-4 py-2 text-red-500 hover:bg-gray-100'>Reject</button>
                     </div>
                   </div>
+                  : <div>{applicant.status}</div>
+                }
+                  
                 </td>
               </tr>
             ))}
@@ -57,7 +121,7 @@ const ViewApplications = () => {
         </table>
       </div>
     </div>
-  )
+  ) : <Loading />
 }
 
 export default ViewApplications
