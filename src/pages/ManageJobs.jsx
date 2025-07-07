@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loading from "../components/Loading"; // Add this line
 
 const ManageJobs = () => {
   const navigate = useNavigate();
