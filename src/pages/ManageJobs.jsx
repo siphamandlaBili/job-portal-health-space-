@@ -9,7 +9,7 @@ import Loading from "../components/Loading"; // Add this line
 const ManageJobs = () => {
   const navigate = useNavigate();
 
-  const [jobs, setJobs] = useState(false);
+  const [companyJobs, setCompanyJobs] = useState(false);
 
   const { backendUrl, companyToken } = useContext(AppContext);
 
@@ -21,7 +21,7 @@ const ManageJobs = () => {
       });
 
       if (data.success) {
-        setJobs(data.jobsData.reverse());
+        setCompanyJobs(data.jobsData.reverse());
         console.log(data.jobsData);
       } else {
         toast.error(data.message);
@@ -57,8 +57,8 @@ const ManageJobs = () => {
     }
   }, [companyToken]);
 
-  return jobs ? (
-    jobs.length === 0 ? (
+  return companyJobs ? (
+    companyJobs.length === 0 ? (
       <div className="flex items-center justify-center h-[70vh]">
         <p className="text-xl sm:text-2xl">No Jobs Available or posted</p>
       </div>
@@ -77,7 +77,7 @@ const ManageJobs = () => {
               </tr>
             </thead>
             <tbody>
-              {jobs.map((job, index) => (
+              {companyJobs.map((job, index) => (
                 <tr key={index} className="text-gray-700">
                   <td className="py-2 px-4 border-b max-sm:hidden">
                     {index + 1}
