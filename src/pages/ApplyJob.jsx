@@ -13,61 +13,73 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 
 const ApplyJob = () => {
   const { id } = useParams();
+  const { user, isSignedIn, isLoaded } = useUser();
   const { getToken } = useAuth();
+  const [job, setJob] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isApplying, setIsApplying] = useState(false);
   const navigate = useNavigate();
   const [jobData, setJobData] = useState(null);
   const [isAlreadyApplied, setIsAlreadyApplied] = useState(false);
   const { jobs, backendUrl, userData, userApplications, fetchUserApplications } = useContext(AppContext);
 
+  useEffect(() => {
+    fetchJob();
+  }, [id]);
+
   const fetchJob = async () => {
     try {
-      const { data } = await axios.get(backendUrl + `/api/jobs/${id}`);
-
+      setIsLoading(true);
+      const { data } = await axios.get(`${backendUrl}/api/jobs/${id}`);
       if (data.success) {
-        setJobData(data.job);
-      } else {
-        toast.error(data.message);
+        setJob(data.job);
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const applyHandler = async () => {
+  const applyJob = async () => {
+    // Wait for Clerk to fully load before checking authentication
+    if (!isLoaded) {
+      toast.info("Please wait while we check your authentication...");
+      return;
+    }
+    
+    if (!isSignedIn || !user) {
+      toast.error("Please login to apply for this job");
+      return;
+    }
+
     try {
-
-      if (!userData) {
-       return toast.error("Login to apply for jobs"); 
-      }
-
-      if (!userData.resume) {
-        navigate('/applications')
-        return toast.error("Upload your resume to apply");
-      }
-
-      const token = await getToken()
-
+      setIsApplying(true);
+      const token = await getToken();
+      
       const { data } = await axios.post(
-        `${backendUrl}/api/users/apply`,
-        { jobId: jobData._id },
+        `${backendUrl}/api/users/apply-job`,
+        { jobId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (data.success) {
-        toast.success(data.message);
-        fetchUserApplications();
-        
-      }else{
-        toast.error(data.message)
+        toast.success("Applied Successfully");
+        navigate("/applications");
+      } else {
+        toast.error(data.message);
       }
-      
     } catch (error) {
-      toast.error(error.message);
+      console.error("Application error:", error);
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setIsApplying(false);
     }
-  }
+  };
 
   const checkAlreadyApplied = () => {
     const hasApplied = userApplications.some(items => items.jobId._id === jobData._id);
@@ -133,7 +145,7 @@ const ApplyJob = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center align-middle text-end text-sm max-md:mx-auto max-mdtext-center">
-              <button onClick={applyHandler} className="bg-blue-600 cursor-pointer p-2.5 px-6 text-white rounded">
+              <button onClick={applyJob} className="bg-blue-600 cursor-pointer p-2.5 px-6 text-white rounded">
                 {isAlreadyApplied? "Already Applied" : "Apply Now"}
               </button>
               <p className="mt-1 text-gray-600 pl-4">
@@ -148,7 +160,7 @@ const ApplyJob = () => {
                 className="rich-text"
                 dangerouslySetInnerHTML={{ __html: jobData.description }}
               ></div>
-              <button onClick={applyHandler} className="bg-blue-600 cursor-pointer mt-10 p-2.5 px-6 text-white rounded">
+              <button onClick={applyJob} className="bg-blue-600 cursor-pointer mt-10 p-2.5 px-6 text-white rounded">
                {isAlreadyApplied? "Already Applied" : "Apply Now"}
               </button>
             </div>
