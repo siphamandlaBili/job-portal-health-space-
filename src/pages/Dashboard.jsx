@@ -7,11 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 
 const Dashboard = () => {
-
+    const { companyData, setCompanyData, setCompanyToken, companyToken } = useContext(AppContext);
     const navigate = useNavigate();
     const [tooltip, setTooltip] = useState(null);
     const [showTooltip, setShowTooltip] = useState(false);
-    const { companyData, setCompanyData, setCompanyToken } = useContext(AppContext);
 
     const handleTooltip = (name) => {
         if (window.innerWidth <= 640) { // Apply only on small screens
@@ -36,6 +35,13 @@ const Dashboard = () => {
             navigate('/dashboard/manage-jobs')
         }
     },[companyData])
+
+    useEffect(() => {
+        // If no token, redirect to homepage
+        if (!companyToken) {
+            navigate('/');
+        }
+    }, [companyToken, navigate]);
 
     return (
         <div className='min-h-screen'>

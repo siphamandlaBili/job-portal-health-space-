@@ -26,14 +26,10 @@ const App = () => {
         <Route path='/applications' element={<Applications/>} />
         <Route path='/apply-job/:id' element={<ApplyJob/>} />
         <Route path='/dashboard' element={<Dashboard />}>
-          {/* Nested routes go here */}
-          {companyToken && (
-            <>
-              <Route path='add-job' element={<AddJob />} />
-              <Route path='manage-jobs' element={<ManageJobs />} />
-              <Route path='view-applications' element={<ViewApplications />} />
-            </>
-          )}
+          {/* Define ALL nested routes WITHOUT conditional rendering */}
+          <Route path='add-job' element={<AddJob />} />
+          <Route path='manage-jobs' element={<ManageJobs />} />
+          <Route path='view-applications' element={<ViewApplications />} />
         </Route>
       </Routes>
     </div>
