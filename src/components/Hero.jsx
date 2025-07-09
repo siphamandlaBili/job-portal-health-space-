@@ -21,7 +21,7 @@ const Hero = () => {
             <div className="relative z-1 container 2xl:px-20 mx-auto my-7">
                 {/* Overlay */}
                 <div
-                    className="absolute inset-0 bg-[url('https://www.aflumed.co.za/wp-content/uploads/2024/03/AfluMed-Logo-11-1536x1119.png')] bg-contain bg-center bg-no-repeat opacity-40 z-20"
+                    className="absolute inset-0 bg-[url('/src/assets/aflulogo.png')] bg-contain bg-center bg-no-repeat opacity-40 z-20"
                 ></div>
 
                 {/* Content */}
