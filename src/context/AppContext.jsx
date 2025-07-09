@@ -103,6 +103,11 @@ export const AppProvider = ({ children }) => {
 }, [companyToken]);
 
 const fetchCompanyData = async () => {
+  // Check for valid token first
+  if (!companyToken) {
+    return;
+  }
+  
   try {
     const { data } = await axios.get(`${backendUrl}/api/company/profile`, {
       headers: { token: companyToken }

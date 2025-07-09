@@ -15,10 +15,15 @@ const ViewApplications = () => {
 
   //Function to fetch company Job Applications Data
   const fetchCompanyJobApplications = async () => {
+    // Check for valid token first
+    if (!companyToken) {
+      toast.error("Please log in as a recruiter.");
+      return;
+    }
+    
     try {
-
-      const {data} =  await axios.get(`${backendUrl}/api/company/applicants`,
-        {headers:{token : companyToken}}
+      const {data} = await axios.get(`${backendUrl}/api/company/applicants`,
+        {headers:{token: companyToken}}
       )
 
       if (data.success && Array.isArray(data.applicants)) {
@@ -29,7 +34,13 @@ const ViewApplications = () => {
       }
       
     } catch (error) {
-      toast.error(error.message)
+      // Check for JWT errors
+      if (error.response?.data?.message?.toLowerCase().includes("jwt")) {
+        toast.error("Session expired. Please log in again.");
+      } else {
+        toast.error(error.message || "Failed to fetch applications");
+      }
+      setApplicants([]);
     }
   }
 
@@ -45,7 +56,7 @@ const ViewApplications = () => {
       if (data.success){
         fetchCompanyJobApplications()
       }else{
-        toast.errror(data.message)
+        toast.error(data.message)
       }
 
     } catch (error) {
@@ -55,9 +66,9 @@ const ViewApplications = () => {
 
   useEffect(() => {
     if (companyToken) {
-      fetchCompanyJobApplications()
+      fetchCompanyJobApplications();
     }
-  }, [companyToken])
+  }, [companyToken, backendUrl]); // Add backendUrl as dependency
 
   return applicants ? applicants.length === 0 ? (
      <div className="flex items-center justify-center h-[70vh]">
@@ -78,27 +89,41 @@ const ViewApplications = () => {
             </tr>
           </thead>
           <tbody>
-            {applicants.filter( item => item.jobId && item.userId).map((applicant, index) => (
+            {applicants.filter(item => item.jobId && item.userId).map((applicant, index) => (
               <tr key={applicant._id} className='text-gray-700 border-b'>
                 <td className='py-3 px-4 text-center align-middle'>{index + 1}</td>
                 
                 {/* User Name Column */}
                 <td className='py-3 px-4 text-center align-middle flex items-center'>
                   <div className='flex items-center gap-3'>
-                    <img className='w-8 h-8 rounded-full max-sm:hidden' src={applicant.userId.image} alt="" />
-                    <span>{applicant.userId.name}</span>
+                    <img 
+                      className='w-8 h-8 rounded-full max-sm:hidden' 
+                      src={applicant.userId?.image || assets.default_profile} 
+                      alt="User" 
+                      onError={(e) => {e.target.src = assets.default_profile}}
+                    />
+                    <span>{applicant.userId?.name || "Unknown User"}</span>
                   </div>
                 </td>
 
                 {/* Job Title & Location */}
-                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobId.title}</td>
-                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobId.location}</td>
+                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobId?.title || "Unknown Job"}</td>
+                <td className='py-3 px-4 align-middle max-sm:hidden'>{applicant.jobId?.location || "Unknown Location"}</td>
 
-                {/* Resume Column */}
+                {/* Resume Column - Added proper null checks */}
                 <td className='py-3 px-4 align-middle'>
-                  <a href={applicant.userId.resume} target='_blank' className='bg-blue-50 text-blue-400 px-3 py-1 rounded inline-flex gap-2 items-center'>
-                    Resume <img src={assets.resume_download_icon} alt="" />
-                  </a>
+                  {applicant.userId?.resume ? (
+                    <a 
+                      href={applicant.userId.resume} 
+                      target='_blank' 
+                      rel="noopener noreferrer"
+                      className='bg-blue-50 text-blue-400 px-3 py-1 rounded inline-flex gap-2 items-center'
+                    >
+                      Resume <img src={assets.resume_download_icon} alt="" />
+                    </a>
+                  ) : (
+                    <span className="text-gray-400">No resume</span>
+                  )}
                 </td>
 
                 {/* Action Column */}

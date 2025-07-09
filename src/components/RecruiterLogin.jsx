@@ -62,14 +62,14 @@ const RecruiterLogin = () => {
 
               const {data} = await axios.post(backendUrl  + '/api/company/register', formData)
               
-              if(data.success) {
-                  setCompanyData(data.company);
-                  setCompanyToken(data.token);
-                  localStorage.setItem('companyToken', data.token);
-                  setShowRecruiterLogin(false);
-                  navigate('/dashboard');
-              }else {
-                toast.error(data.message);
+              if(data.success && data.token) { // Added check for token
+                setCompanyData(data.company);
+                setCompanyToken(data.token);
+                localStorage.setItem('companyToken', data.token);
+                setShowRecruiterLogin(false);
+                navigate('/dashboard');
+              } else {
+                toast.error(data.message || "Registration failed");
               }
             
           }
