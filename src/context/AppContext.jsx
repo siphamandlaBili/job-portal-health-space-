@@ -80,11 +80,20 @@ export const AppProvider = ({ children }) => {
 };
 
   useEffect(() => {
-  fetchJobs(); // Fetch jobs on app load
   const storedCompanyToken = localStorage.getItem('companyToken');
-  if (storedCompanyToken) {
+  // Only set if token is a non-empty string and looks like a JWT
+  if (
+    storedCompanyToken &&
+    storedCompanyToken !== "undefined" &&
+    storedCompanyToken !== "null" &&
+    storedCompanyToken.length > 10 // JWTs are always longer than 10 chars
+  ) {
     setCompanyToken(storedCompanyToken);
+  } else {
+    localStorage.removeItem('companyToken');
+    setCompanyToken(null);
   }
+  fetchJobs();
 }, []);
 
   useEffect(() => {
@@ -101,10 +110,23 @@ const fetchCompanyData = async () => {
     if (data.success) {
       setCompanyData(data.company);
     } else {
-      toast.error(data.message);
+      // If token is bad, clear it
+      if (data.message && data.message.toLowerCase().includes("jwt")) {
+        localStorage.removeItem('companyToken');
+        setCompanyToken(null);
+        toast.error("Session expired. Please log in again.");
+      } else {
+        toast.error(data.message);
+      }
     }
   } catch (error) {
-    toast.error(error.message);
+    if (error.response?.data?.message?.toLowerCase().includes("jwt")) {
+      localStorage.removeItem('companyToken');
+      setCompanyToken(null);
+      toast.error("Session expired. Please log in again.");
+    } else {
+      toast.error(error.message);
+    }
   }
 };
 
