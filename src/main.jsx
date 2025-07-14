@@ -13,14 +13,16 @@ if (!PUBLISHABLE_KEY) {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <ClerkProvider 
-      publishableKey={PUBLISHABLE_KEY}
-      fallbackRedirectUrl="/applications" // Changed from afterSignInUrl
-    >
-      <AppContextProvider>
-        <App />
-      </AppContextProvider>
-    </ClerkProvider>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <ClerkProvider 
+        publishableKey={PUBLISHABLE_KEY}
+        fallbackRedirectUrl="/applications"
+      >
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
+      </ClerkProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 )
