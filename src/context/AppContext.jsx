@@ -33,6 +33,7 @@ export const AppContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
+      console.error("Fetch jobs error:", error);
       toast.error(error.message);
     }
   };
